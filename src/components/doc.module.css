@@ -1,0 +1,14 @@
+.doc-container {
+  background-color: var(--gray-2);
+  padding: var(--space-5);
+  overflow: auto;
+}
+
+.doc {
+  background: white;
+  width: fit-content;
+  padding: var(--space-6);
+  border: 1px solid var(--gray-6);
+  margin-inline: auto;
+  border-radius: var(--radius-3);
+}

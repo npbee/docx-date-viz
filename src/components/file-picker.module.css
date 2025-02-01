@@ -1,0 +1,84 @@
+/**
+ * Using some wild CSS houdini stuff to create a cool gradient animation.
+ */
+@property --gradient1 {
+  syntax: "<color>";
+  initial-value: #fff;
+  inherits: false;
+}
+
+@property --gradient2 {
+  syntax: "<color>";
+  initial-value: #fff;
+  inherits: false;
+}
+
+@property --gradient3 {
+  syntax: "<color>";
+  initial-value: #fff;
+  inherits: false;
+}
+
+@property --gradient4 {
+  syntax: "<color>";
+  initial-value: #fff;
+  inherits: false;
+}
+
+@property --gradient5 {
+  syntax: "<color>";
+  initial-value: #fff;
+  inherits: false;
+}
+
+@property --gradient6 {
+  syntax: "<color>";
+  initial-value: #fff;
+  inherits: false;
+}
+
+@property --gradient7 {
+  syntax: "<color>";
+  initial-value: #fff;
+  inherits: false;
+}
+
+.dropzone {
+  border: 2px dashed var(--gray-6);
+  width: 100%;
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  height: 400px;
+  border-radius: var(--radius-3);
+
+  background: radial-gradient(at 40% 20%, var(--gradient1) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, var(--gradient2) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, var(--gradient3) 0px, transparent 50%),
+    radial-gradient(at 80% 50%, var(--gradient4) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, var(--gradient5) 0px, transparent 50%),
+    radial-gradient(at 80% 100%, var(--gradient6) 0px, transparent 50%),
+    radial-gradient(at 0% 0%, var(--gradient7) 0px, transparent 50%);
+  transition:
+    --gradient1 200ms,
+    --gradient2 250ms,
+    --gradient3 300ms,
+    --gradient4 350ms,
+    --gradient5 400ms,
+    --gradient6 450ms,
+    --gradient7 500ms;
+}
+
+.dropzone[data-drag-active="true"] {
+  border-color: var(--accent-7);
+  --gradient1: hsla(28, 100%, 74%, 1);
+  --gradient2: hsla(189, 100%, 56%, 1);
+  --gradient3: hsla(355, 100%, 93%, 1);
+  --gradient4: hsla(340, 100%, 76%, 1);
+  --gradient5: hsla(22, 100%, 77%, 1);
+  --gradient6: hsla(242, 100%, 70%, 1);
+  --gradient7: hsla(343, 100%, 76%, 1);
+}

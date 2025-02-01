@@ -1,79 +1,111 @@
 import { useReducer } from "react";
-import { CalendarEntry } from "./features/calendar/entries";
-import { Doc } from "./features/doc/doc";
+import { CalendarEntry } from "./lib/calendar-entries";
 
 type InitState = {
-  view: "init";
+  state: "init";
 };
 
 type ParsingState = {
-  view: "parsing";
+  state: "parsing";
 };
 
 type ErrorState = {
-  view: "error";
+  state: "error";
   error: string;
 };
 
-type CalendarState = {
-  view: "cal";
+export type ParsedState = {
+  state: "parsed";
+
+  /**
+   * The parsed entries from the files
+   */
   entries: Array<CalendarEntry>;
-  docs: Array<Doc>;
+
+  /**
+   * Current sort of the entries in the sidebar
+   */
+  sort: "asc" | "desc" | "none";
+
+  /**
+   * The entry that's currently displaying in the calendar
+   */
+  activeEntryId?: string | null;
+
+  /**
+   * The date that controls which month the calendar is showing
+   */
+  activeDate: Date;
 };
 
-type DocState = {
-  view: "docs";
-  docs: Array<Doc>;
-  activeId?: string;
-  entries: Array<CalendarEntry>;
-};
-
-export type AppState =
-  | InitState
-  | ParsingState
-  | CalendarState
-  | DocState
-  | ErrorState;
+export type AppState = InitState | ParsingState | ParsedState | ErrorState;
 
 type AppEvt =
   | { type: "parse-files" }
-  | { type: "parse-success"; entries: Array<CalendarEntry>; docs: Array<Doc> }
+  | { type: "parse-success"; entries: Array<CalendarEntry> }
   | { type: "parse-fail"; error: string }
-  | { type: "show-docs"; id?: string }
-  | { type: "show-cal" };
+  | { type: "sort"; sort: ParsedState["sort"] }
+  | { type: "activate-entry"; id: string }
+  | { type: "deactivate-entry"; id: string }
+  | { type: "set-date"; date: Date };
 
 const appInitialState: AppState = {
-  view: "init",
+  state: "init",
 };
 
 function appReducer(state: AppState, evt: AppEvt): AppState {
   switch (evt.type) {
     case "parse-files":
-      return { view: "parsing" };
+      return { state: "parsing" };
     case "parse-success": {
-      return { view: "cal", entries: evt.entries, docs: evt.docs };
-    }
-    case "parse-fail": {
-      return { view: "error", error: evt.error };
-    }
-    case "show-docs": {
-      if (state.view !== "cal" && state.view !== "docs") {
-        return state;
-      }
-
       return {
-        view: "docs",
-        docs: state.docs,
-        activeId: evt.id,
-        entries: state.entries,
+        state: "parsed",
+        entries: evt.entries,
+        sort: "none",
+        activeEntryId: evt.entries[0]?.id ?? null,
+        activeDate: evt.entries[0]?.date ?? new Date(),
       };
     }
-    case "show-cal": {
-      if (state.view !== "docs") {
+    case "parse-fail": {
+      return { state: "error", error: evt.error };
+    }
+    case "sort": {
+      if (state.state !== "parsed") {
+        return state;
+      }
+      return { ...state, sort: evt.sort };
+    }
+    case "activate-entry": {
+      if (state.state !== "parsed") {
+        return state;
+      }
+      // Find the start date of the entry so we can set the active date
+      const entry = state.entries.find((e) => e.id === evt.id);
+
+      if (!entry) {
+        // Sanity check, we should always have an entry
         return state;
       }
 
-      return { view: "cal", entries: state.entries, docs: state.docs };
+      // Set the active date to the start date of the entry
+      return { ...state, activeEntryId: evt.id, activeDate: entry.date };
+    }
+    case "deactivate-entry": {
+      if (state.state !== "parsed") {
+        return state;
+      }
+      // Find the start date of the entry so we can set the active date
+      if (state.activeEntryId !== evt.id) {
+        return state;
+      }
+
+      return { ...state, activeEntryId: null };
+    }
+    case "set-date": {
+      if (state.state !== "parsed") {
+        return state;
+      }
+      return { ...state, activeDate: evt.date };
     }
     default: {
       return state;

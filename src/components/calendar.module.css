@@ -1,0 +1,63 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--gray-1);
+  border-left: 1px solid var(--gray-6);
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  align-items: center;
+}
+
+.entry-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--gray-6);
+  border-bottom: 1px solid var(--gray-6);
+  list-style: none;
+  padding: 0;
+}
+
+.entry-list > * + * {
+  border-top: 1px solid var(--gray-6);
+}
+
+.event {
+  position: relative;
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
+.event:hover {
+  background-color: var(--accent-3);
+}
+
+.event:focus-within {
+  background-color: var(--accent-3);
+}
+
+.event[data-active="true"] {
+  background-color: var(--accent-4);
+}
+
+.entryActivationBtn {
+  all: unset;
+}
+
+/**
+ * The hitbox is positioned absolutely so the entire event is clickable
+ */
+.hitbox {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}

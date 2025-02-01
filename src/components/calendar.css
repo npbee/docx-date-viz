@@ -1,0 +1,24 @@
+/**
+ * Custom global overrides for `react-big-calendar`
+ */
+.rbc-event {
+  padding: 0;
+  text-align: left;
+}
+
+.rbc-event,
+.rbc-event.rbc-selected {
+  background-color: unset;
+}
+
+.rbc-toolbar {
+  /** Hacking my way to get the month on the left :) */
+  flex-direction: row-reverse;
+}
+
+.rbc-toolbar .rbc-toolbar-label {
+  text-align: left;
+  font-size: var(--font-size-4);
+  font-weight: var(--font-weight-bold);
+  color: var(--gray-12);
+}

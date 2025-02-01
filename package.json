@@ -8,24 +8,22 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "tc": "tsc --noEmit"
+    "tc": "tsc --noEmit",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@harbour-enterprises/superdoc": "^0.4.26",
     "@radix-ui/react-popover": "^1.1.5",
-    "@tailwindcss/vite": "^4.0.3",
+    "@radix-ui/themes": "^3.2.0",
+    "any-date-parser": "^2.0.3",
     "chrono-node": "^2.7.8",
-    "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "lucide-react": "^0.474.0",
     "mammoth": "^1.9.0",
     "react": "^18.3.1",
     "react-big-calendar": "^1.17.1",
     "react-dom": "^18.3.1",
-    "react-dropzone": "^14.3.5",
-    "tailwind-merge": "^3.0.1",
-    "tailwind-variants": "^0.3.1",
-    "tailwindcss": "^4.0.3"
+    "react-dropzone": "^14.3.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
@@ -37,6 +35,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
+    "prettier": "^3.4.2",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
     "vite": "^6.0.5"
