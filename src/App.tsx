@@ -1,35 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Calendar } from "./features/calendar/calendar";
+import { useApp } from "./state";
+import { FilePicker } from "./components/file-picker";
+import { entriesFromFiles } from "./features/calendar/entries";
+import * as Layout from "./components/layout";
+import { docsFromFiles } from "./features/doc/doc";
+import { Docs } from "./features/doc/doc";
 
-function App() {
-  const [count, setCount] = useState(0)
+// TODO:
+// 1. Better snippets
+// 2. Error handling
+// 3. Pagination
+export default function App() {
+  const [app, send] = useApp();
+
+  async function handleFiles(files: Array<File>) {
+    try {
+      send({ type: "parse-files" });
+      const docs = docsFromFiles(files);
+      const entries = await entriesFromFiles(docs);
+      send({ type: "parse-success", entries, docs });
+    } catch (err) {
+      send({ type: "parse-fail", error: (err as Error).message });
+    }
+  }
+
+  console.log(app.view);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Layout.Container>
+      <Layout.Header
+        activeView={app.view}
+        onShowCal={() => send({ type: "show-cal" })}
+        onShowDocs={() => send({ type: "show-docs" })}
+        onPick={handleFiles}
+      />
+      <Layout.Main>
+        {app.view === "cal" ? (
+          <Calendar
+            entries={app.entries}
+            onViewDoc={(id) => send({ type: "show-docs", id })}
+          />
+        ) : null}
+        {app.view === "docs" ? (
+          <Docs
+            onChangeDoc={(id) => send({ type: "show-docs", id })}
+            docs={app.docs}
+            activeId={app.activeId}
+          />
+        ) : null}
+        {app.view === "init" ? (
+          <div>
+            <FilePicker onPick={handleFiles} />
+          </div>
+        ) : null}
+      </Layout.Main>
+    </Layout.Container>
+  );
 }
-
-export default App
