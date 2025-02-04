@@ -3,8 +3,8 @@ import { useApp } from "./state";
 import { FilePicker } from "./components/file-picker";
 import { Calendar } from "./components/calendar";
 import { entriesFromFiles } from "./lib/calendar-entries";
-import { Box, Flex, Heading } from "@radix-ui/themes";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Box, Callout, Flex, Heading, Text } from "@radix-ui/themes";
+import { Calendar as CalendarIcon, Frown } from "lucide-react";
 
 export default function App() {
   const [app, send] = useApp();
@@ -50,6 +50,19 @@ export default function App() {
           <Box p="5">
             <FilePicker onPick={handleFiles} />
           </Box>
+        ) : null}
+        {app.state === "error" ? (
+          <Flex mx="auto" p="5" gap="2" direction="column">
+            <Callout.Root color="red">
+              <Callout.Icon>
+                <Frown size="16" />
+              </Callout.Icon>
+              <Callout.Text>
+                There was an error parsing the files.{" "}
+              </Callout.Text>
+            </Callout.Root>
+            <FilePicker onPick={handleFiles} />
+          </Flex>
         ) : null}
       </main>
     </Flex>
